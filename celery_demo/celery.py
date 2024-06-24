@@ -5,6 +5,14 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "celery_demo.settings")
 
 app = Celery("celery_demo")
 app.config_from_object("django.conf:settings", namespace="CELERY")
+
+app.conf.update(
+    worker_concurrency=2,
+)
+
+app.conf.task_routes = {"celery_demo.tasks.*": {"queue": "celery_demo_q_1"}}
+
+
 app.autodiscover_tasks()
 
 

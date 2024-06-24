@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <link rel="stylesheet" href="{% static "css/index.css" %}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap')
+    </style>
+</head>
+    <body>
+        <div class="body">
+            <h2>Image uploaded</h2>
+            <div>
+                <div><a href="{% url 'upload_image' %}">Go back</a></div>
+            </div>
+        </div>
+    </body>
+</html>

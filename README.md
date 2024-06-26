@@ -60,7 +60,7 @@ This run docker container with our project in virtual environment. Venv in this 
           - redis
 
 - Celery image is deprecated and Python image should be used. To created Celery worker in docker container we use code base of our project, so mostly the configuration of worker is same as configuration of django project.
-
+      
       import os
       from celery import Celery
 
@@ -87,6 +87,30 @@ This run docker container with our project in virtual environment. Venv in this 
     	CELERY_RESULT_SERIALIZER = 'json'
     	CELERY_TIMEZONE = 'UTC'
 
+- celery.py:
+
+
+         from celery import Celery
+    
+         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "celery_demo.settings")
+    
+         app = Celery("celery_demo")
+         app.config_from_object("django.conf:settings", namespace="CELERY")
+    
+         app.conf.update(
+            worker_concurrency=2,
+         )
+    
+         app.conf.task_routes = {"celery_demo.tasks.*": {"queue": "celery_demo_q_1"}}
+    
+    
+         app.autodiscover_tasks()
+
+
+- Celery workers can have queues for their tasks, tasks can have priority levels.
+- Celery tasks can be grouped or chained. Difference is that when they are grouped, grouped tasks will be executed randomly. When chained tasks will be executed in specific order we determine. What is dow mostly when tasks have dependencies between them and for example task2 need the result of task 1.
+
+- Celery workers can be scaled depends on load. Most of the time server providers offer aoutomatic scaling.
 
 
 

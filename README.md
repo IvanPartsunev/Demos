@@ -1,6 +1,6 @@
 # Research CELERY for background tasks and demo
 
-1. Setup Celery in the project:
+Setup Celery in the project:
 - Create docker-compose.yaml with needed images – django (Python) image, Celery worker image, Redis image (other message brokers also can be used)
 
 - For Django project configuration of Docker file is:
@@ -82,10 +82,10 @@ This run docker container with our project in virtual environment. Venv in this 
 	
     	CELERY_BROKER_URL = "redis://redis:6379/0"
     	CELERY_RESULT_BACKEND = "redis://redis:6379/0"
-    	CELERY_ACCEPT_CONTENT = ['json']
-    	CELERY_TASK_SERIALIZER = 'json'
-    	CELERY_RESULT_SERIALIZER = 'json'
-    	CELERY_TIMEZONE = 'UTC'
+    	CELERY_ACCEPT_CONTENT = ["json"]
+    	CELERY_TASK_SERIALIZER = "json"
+    	CELERY_RESULT_SERIALIZER = "json"
+    	CELERY_TIMEZONE = "UTC"
 
 - celery.py:
 
@@ -110,9 +110,36 @@ This run docker container with our project in virtual environment. Venv in this 
 - Celery workers can have queues for their tasks, tasks can have priority levels.
 - Celery tasks can be grouped or chained. Difference is that when they are grouped, grouped tasks will be executed randomly. When chained tasks will be executed in specific order we determine. What is dow mostly when tasks have dependencies between them and for example task2 need the result of task 1.
 
-- Celery workers can be scaled depends on load. Most of the time server providers offer aoutomatic scaling.
+- Celery workers can be scaled depends on load. Most of the server providers offer automatic scaling.
 
 
 
- 
+# Research methods of fetching data from client ERP (from API)
 
+- set up Redis as project CACHE (settings.py):
+
+      CACHES = {
+          "default": {
+              "BACKEND": "django_redis.cache.RedisCache",
+              "LOCATION": "redis://redis:6379/1",  # Use a different Redis database to separate cache from Celery broker
+              "OPTIONS": {
+                  "CLIENT_CLASS": "django_redis.client.DefaultClient",
+              }
+          }
+      }
+  Here we use "redis://redis:6379/1" because we run the project in Dockerized environment. In local environment "localhost" should be used.
+
+- set up Celery beat to schedule API calls (settings.py):
+
+      from celery.schedules import crontab
+
+      <other settings>
+
+      CELERY_BEAT_SCHEDULE = {
+          "fetch-and-cache-data-every-minute": {
+              "task": "celery_demo.tasks.<scheduled_task>",
+              "schedule": crontab(minute="*"),  # Run every minute
+              # "schedule": crontab(minute="0", hour="0,12"),  # At midnight and noon
+          },
+      }
+- 

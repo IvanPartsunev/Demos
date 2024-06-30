@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,11 +21,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    #Third party apps
+    # Third party apps
+    "django_celery_beat",
 
-    #Project apps
-
+    # Project apps
     "celery_demo.project_core.apps.ProjectCoreConfig",
+    "celery_demo.celery_beat.apps.CeleryBeatConfig",
 ]
 
 MIDDLEWARE = [
@@ -87,21 +89,39 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 STATICFILES_DIRS = (
-    BASE_DIR / 'staticfiles',
+    BASE_DIR / "staticfiles",
 )
 
-MEDIA_ROOT = BASE_DIR / 'mediafiles' / "img"
+MEDIA_ROOT = BASE_DIR / "mediafiles" / "img"
 
 MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",  # Use a different Redis database to separate cache from Celery broker
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
+
+CELERY_BEAT_SCHEDULE = {
+    "fetch-and-cache-data": {
+        "task": "celery_demo.tasks.fetch_and_cache_data",
+        # "schedule": crontab(minute="0", hour="0,12"),  # At midnight and noon
+        "schedule": crontab(minute="*"),  # Run every minute
+    },
+}

@@ -1,5 +1,6 @@
 from django.urls import path
 
+from celery_demo.celery_beat.views import DataView
 from celery_demo.project_core.views import UploadImageView, ImageUploadView
 
 urlpatterns = [

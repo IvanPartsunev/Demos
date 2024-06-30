@@ -31,3 +31,14 @@ services:
     depends_on:
       - redis
 
+  celery_beat:
+    build: ./
+    container_name: celery_beat
+    command: celery --app=celery_demo beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./:/celery_demo
+    env_file:
+      - ./env/django.env
+    depends_on:
+      - redis
+      - celery

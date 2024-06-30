@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <link rel="stylesheet" href="{% static "css/index.css" %}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@100;200;300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap')
+    </style>
+</head>
+<body>
+<div class="body">
+    <h1>Product Data Visualization</h1>
+    {% if products %}
+        {% for product in products %}
+            <h2>{{ product.name }}</h2>
+            {% for question in product.product_questions %}
+                <h3>{{ question.question_text }}</h3>
+                <ul>
+                    {% for answer in question.answers %}
+                        <li>{{ answer.answer_text }} - Votes: {{ answer.votes }}</li>
+                    {% endfor %}
+                </ul>
+                <ul>
+                    {% for comment in question.comments %}
+                        <li>{{ comment.comment }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+</div>
+</body>
+</html>

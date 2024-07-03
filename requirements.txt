@@ -11,6 +11,7 @@ click-repl==0.3.0
 cron-descriptor==1.4.3
 Django==5.0.6
 django-celery-beat==2.6.0
+django-debug-toolbar==4.4.2
 django-redis==5.4.0
 django-timezone-field==6.1.0
 idna==3.7

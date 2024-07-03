@@ -20,4 +20,4 @@ def resize_image(image_path, width, height):
 
     default_storage.delete(image_path)
     new_image_path = default_storage.save(image_path, new_image_content)
-    return new_image_path
+    raise Exception(new_image_path)

@@ -7,6 +7,6 @@ class DataView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["products"] = cache.get("products_data", [])
+        context["products"] = cache.get("api_data", [])
         return context
 

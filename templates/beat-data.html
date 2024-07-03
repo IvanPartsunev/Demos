@@ -13,11 +13,12 @@
 <body>
 <div class="body">
     <h1>Product Data Visualization</h1>
+
     {% if products %}
         {% for product in products %}
-            <h2>{{ product.name }}</h2>
+            <h2>Product: {{ product.name }}</h2>
             {% for question in product.product_questions %}
-                <h3>{{ question.question_text }}</h3>
+                <h3>Question: {{ question.question_text }}?</h3>
                 <ul>
                     {% for answer in question.answers %}
                         <li>{{ answer.answer_text }} - Votes: {{ answer.votes }}</li>
@@ -25,6 +26,7 @@
                 </ul>
                 <ul>
                     {% for comment in question.comments %}
+                        <h4>Comments:</h4>
                         <li>{{ comment.comment }}</li>
                     {% endfor %}
                 </ul>

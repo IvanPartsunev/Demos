@@ -4,8 +4,10 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis
+#    networks:
+#      - network1
 
-  django:
+  celery_demo:
     build: ./
     container_name: celery_demo
     ports:
@@ -19,6 +21,8 @@ services:
     tty: true
     depends_on:
       - redis
+#    networks:
+#      - network1
 
   celery:
     build: ./
@@ -30,11 +34,13 @@ services:
       - ./env/django.env
     depends_on:
       - redis
+#    networks:
+#      - network1
 
   celery_beat:
     build: ./
     container_name: celery_beat
-    command: celery --app=celery_demo beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery --app=celery_demo beat -l INFO
     volumes:
       - ./:/celery_demo
     env_file:
@@ -42,3 +48,9 @@ services:
     depends_on:
       - redis
       - celery
+#    networks:
+#      - network1
+
+#networks:
+#  network1:
+#    driver: bridge

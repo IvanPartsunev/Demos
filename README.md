@@ -142,4 +142,5 @@ This run docker container with our project in virtual environment. Venv in this 
               # "schedule": crontab(minute="0", hour="0,12"),  # At midnight and noon
           },
       }
-- 
+
+- You can use this repo https://github.com/IvanPartsunev/survey_app_api/tree/for-api-calls to clone and run API for testing. There are instructions in README.md.

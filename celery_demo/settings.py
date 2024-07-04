@@ -134,3 +134,22 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="*"),  # Run every minute
     },
 }
+
+CELERY_TASK_QUEUES = {
+    'default': {
+        'exchange': 'default',
+        'exchange_type': 'direct',
+        'binding_key': 'default',
+    },
+    'beat_tasks': {
+        'exchange': 'beat_tasks',
+        'exchange_type': 'direct',
+        'binding_key': 'beat_tasks',
+    },
+}
+
+CELERY_TASK_DEFAULT_QUEUE = 'default'
+CELERY_TASK_ROUTES = {
+    'celery_demo.project_core.tasks.resize_image': {'queue': 'default'},
+    'celery_demo.celery_beat.tasks.fetch_and_cache_data': {'queue': 'beat_tasks'},
+}

@@ -4,8 +4,6 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis
-#    networks:
-#      - network1
 
   celery_demo:
     build: ./
@@ -21,21 +19,28 @@ services:
     tty: true
     depends_on:
       - redis
-#    networks:
-#      - network1
 
-  celery:
+  celery_worker_default:
     build: ./
-    container_name: celery_worker
-    command: celery --app=celery_demo worker -l INFO
+    container_name: celery_worker_default
+    command: celery --app=celery_demo worker -l INFO -Q default
     volumes:
       - ./:/celery_demo
     env_file:
       - ./env/django.env
     depends_on:
       - redis
-#    networks:
-#      - network1
+
+  celery_worker_beat:
+    build: ./
+    container_name: celery_worker_beat_tasks
+    command: celery --app=celery_demo worker -l INFO -Q beat_tasks
+    volumes:
+      - ./:/celery_demo
+    env_file:
+      - ./env/django.env
+    depends_on:
+      - redis
 
   celery_beat:
     build: ./
@@ -47,10 +52,4 @@ services:
       - ./env/django.env
     depends_on:
       - redis
-      - celery
-#    networks:
-#      - network1
-
-#networks:
-#  network1:
-#    driver: bridge
+      - celery_worker_beat

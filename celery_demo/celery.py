@@ -10,9 +10,6 @@ app.conf.update(
     worker_concurrency=2,
 )
 
-app.conf.task_routes = {"celery_demo.tasks.*": {"queue": "celery_demo_q_1"}}
-
-
 app.autodiscover_tasks()
 
 

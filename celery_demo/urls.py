@@ -8,4 +8,5 @@ urlpatterns = [
     path("", include("celery_demo.project_core.urls")),
     path("beat/", include("celery_demo.celery_beat.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("accounts/", include("celery_demo.accounts.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

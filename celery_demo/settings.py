@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # Project apps
     "celery_demo.project_core.apps.ProjectCoreConfig",
     "celery_demo.celery_beat.apps.CeleryBeatConfig",
+    "celery_demo.accounts.apps.AccountsConfig"
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,5 @@ CELERY_TASK_ROUTES = {
     'celery_demo.project_core.tasks.resize_image': {'queue': 'default'},
     'celery_demo.celery_beat.tasks.fetch_and_cache_data': {'queue': 'beat_tasks'},
 }
+
+AUTH_USER_MODEL = "accounts.AccountModel"
